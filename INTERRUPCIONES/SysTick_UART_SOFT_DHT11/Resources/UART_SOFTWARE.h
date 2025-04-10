@@ -1,0 +1,43 @@
+/*
+
+    UART_SOFTWARE.h
+
+*/
+
+#ifndef __UART_SOFTWARE_H__
+#define __UART_SOFTWARE_H__
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
+#include "ch32v00x.h"
+
+/* 
+                           SysTick -> CMP
+        Tiempo_INT = -----------------------------  
+                       24 MHz / STK_CTLR_STLCK
+
+        donde:
+                Tiempo_INT = Tiempo de interrupcion 
+                SysTick -> CMP = registro para el valor de comparacion de interrupcion
+                STK_CTLR_STLCK = divisor de frecuencia un 1 equivale a dividir por 1 y
+                                 un 0 equivale a dividir por 8
+*/
+
+#define VALUE_CMP_ms(x) ((SystemCoreClock/8000 )*x ) 
+#define VALUE_CMP_us(x) ((SystemCoreClock/8000000 )*x ) 
+#define UART_H (GPIOC -> BSHR = GPIO_BSHR_BS1)
+#define UART_L (GPIOC -> BSHR = GPIO_BSHR_BR1)
+
+void PORTC_init(void);
+void SysTick_Handler() __attribute__((interrupt("WCH-Interrupt-fast")));
+void SysTick_Enable(void);
+void SysTick_Disable(void);
+void UART_Char(uint8_t DAT);
+void UART_Str(const char* DAT);
+
+#ifdef __cplusplus
+ }
+#endif //__UART_SOFTWARE_H__
+#endif

@@ -34,7 +34,7 @@ uint8_t TEMP[2], HUME[2] ;
 int main(void){
 
     Delay_Init();
-    PORTC_init();
+    UART_SOFT_Init(2400);
     
     uint8_t ERROR_T=0, ERROR_H=0;
     while(1){

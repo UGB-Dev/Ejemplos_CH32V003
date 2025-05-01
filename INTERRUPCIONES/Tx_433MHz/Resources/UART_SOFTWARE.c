@@ -11,7 +11,7 @@ uint32_t Baud_Rate=0;
 
 void SysTick_Enable(void){
     SysTick -> SR &= ~(1<<0); // BORRAR BANDERA 
-    SysTick -> CMP = VALUE_CMP_us(Baud_Rate);
+    SysTick -> CMP = VALUE_CMP_us(Baud_Rate); // 416 us es para 2400 bauds
     SysTick -> CTLR = 0x0B;
     SysTick -> CNT = 0;
     NVIC_EnableIRQ(SysTicK_IRQn);
@@ -25,8 +25,7 @@ void SysTick_Disable(void){
 /*********************************************************************
  * @fn      UART_SOFT_Init
  *
- * @brief   pin PC7 for UART
- *          8N1 defaul UART (8 bit, no parity, 1 stop bit)
+ * @brief   pin PC7 for UART.
  *
  * @return  none
  */
@@ -40,7 +39,7 @@ void UART_SOFT_Init(uint32_t Bauds){
     GPIOC -> CFGLR |= GPIO_CFGLR_MODE7;
 
     Baud_Rate = 1000000/Bauds;
-    UART_H; // se mantiene en 1 logico la salida
+    UART_H; // se mantiene la salida en 1 logico 
 }
 
 void UART_Char(uint8_t DAT){
@@ -62,7 +61,7 @@ void SysTick_Handler(){ // Rutina de interrupcion SysTick
 			
 			case 1: 
             // bit de start
-				DAT_Pos++;
+				++DAT_Pos;
 				UART_H;
 				UART_L;
 				break;
@@ -71,7 +70,7 @@ void SysTick_Handler(){ // Rutina de interrupcion SysTick
             // se enviar el bit menos significativo primero
 				( DAT_Copia & 0x01 )? UART_H : UART_L;
 				DAT_Copia >>= 1;
-				DAT_Pos++;
+				++DAT_Pos;
 				break;
 			
 			case 10: // bit de stop

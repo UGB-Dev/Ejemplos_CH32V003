@@ -12,6 +12,7 @@
 #endif
 
 #include "ch32v00x.h"
+//#include <stdint.h>
 
 /* 
                            SysTick -> CMP
@@ -27,12 +28,11 @@
 
 #define VALUE_CMP_ms(x) ((SystemCoreClock/8000 )*x ) 
 #define VALUE_CMP_us(x) ((SystemCoreClock/8000000 )*x ) 
-#define UART_H (GPIOC -> BSHR = GPIO_BSHR_BS1)
-#define UART_L (GPIOC -> BSHR = GPIO_BSHR_BR1)
+#define UART_H (GPIOC -> BSHR = GPIO_BSHR_BS7)
+#define UART_L (GPIOC -> BSHR = GPIO_BSHR_BR7)
 
-extern volatile uint8_t DAT_Copia=0, DAT_Pos=0; 
-extern uint32_t Baud_Rate=0;
 
+/*  FUNCIONES PROTOTIPO */
 void UART_SOFT_Init(uint32_t Bauds);
 void SysTick_Handler() __attribute__((interrupt("WCH-Interrupt-fast")));
 void SysTick_Enable(void);

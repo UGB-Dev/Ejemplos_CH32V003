@@ -7,20 +7,30 @@
 #include "UART_SOFTWARE.h"
 
 volatile uint8_t DAT_Copia=0, DAT_Pos=0; // variables de control para envio de datos
+uint32_t Baud_Rate=0;
 
 void SysTick_Enable(void){
     SysTick -> SR &= ~(1<<0); // se borra bandera 
-    SysTick -> CMP = VALUE_CMP_us(416); // 416 us es para 2400 bauds
+    SysTick -> CMP = VALUE_CMP_us(Baud_Rate);
     SysTick -> CTLR = 0x0B;
     SysTick -> CNT = 0;
     NVIC_EnableIRQ(SysTicK_IRQn); // se habilita la peticion de interrupcion externa para SysTick
 }
 
 void SysTick_Disable(void){
+    SysTick -> CTLR = 0;
     NVIC_DisableIRQ(SysTicK_IRQn); // se deshabilita la peticion de interrupcion externa para SysTick
 }
 
-void PORTC_init(void){
+/*********************************************************************
+ * @fn      UART_SOFT_Init
+ *
+ * @brief   pin PC7 for UART
+ *          8N1 defaul UART (8 bit, no parity, 1 stop bit)
+ *
+ * @return  none
+ */
+void UART_SOFT_Init(uint32_t Bauds){
     /*  CONFIGURACION DEL PERIFERICO  */  
     RCC -> APB2PRSTR |= RCC_IOPCRST; // activacion de reset en puerto C
     RCC -> APB2PRSTR &= ~RCC_IOPCRST; // desactivacion de reset en puerto C
@@ -30,6 +40,7 @@ void PORTC_init(void){
     GPIOC -> CFGLR &= ~(0xF<<4); // reset en pin PC1
     GPIOC -> CFGLR |= GPIO_CFGLR_MODE1; // pin PC1 como salida push-pull a 30MHz
 
+    Baud_Rate = 1000000/Bauds;
     UART_H; // se mantiene en 1 logico la salida
 }
 

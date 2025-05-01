@@ -3,8 +3,8 @@
  * Author             : WCH
  * Version            : V1.0.0
  * Date               : 2023/12/25
- * Description        : Interrupcion SysTick; usar el reloj del sistema para generar
-                        la base de tiempo de UART por software.
+ * Description        : Tx 433 MHz: Generar la trama de datos usando UART y codificacion
+                        Manchester para transmitir datos usando los modulos de 433 MHz.
  *********************************************************************************/
  /*
     Configuracion en archivo sytem_ch32v00x.c
@@ -13,10 +13,15 @@
     descomentar esta linea -> #define SYSCLK_FREQ_24MHZ_HSI   HSI_VALUE
 
     El MCU CH32V003 trabajara a 24 MHz y los perifericos a 24 MHz
+
+    NOTA: No usar el pin PC7 ya que se usa para controlar el sensor DHT11  
  */
+
 
 #include "debug.h"
 #include "UART_SOFTWARE.h"
+#include "Modulo_433MHz.h"
+
 
 /*********************************************************************
  * @fn      main
@@ -25,18 +30,17 @@
  *
  * @return  none
  */
-
 int main(void){
     Delay_Init();
     UART_SOFT_Init(2400);
 
     while(1){
-        UART_Str("HOLA MUNDO\r\n");
-        //Delay_Ms(500);
-        UART_Str("ESTO ES UN MENSAJE DE UART POR SOFTWARE A 115200 BAUDS\r\n");
-        //Delay_Ms(500);
-        UART_Str("  :)  \r\n\n");
+        for (uint8_t i=0; i<10; ++i){
+            Trama_433_MHz("HOLA MUNDO, UART POR SOFTWARE", 1); // Trama codificada para modulo 433 MHz
+        }
+        
+        UART_Str("\r\nHOLA MUNDO, UART POR SOFTWARE\r\n");
         Delay_Ms(500);
+
     }
 }
-

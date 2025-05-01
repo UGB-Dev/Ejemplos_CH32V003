@@ -31,9 +31,11 @@
 #define UART_H (GPIOC -> BSHR = GPIO_BSHR_BS7)
 #define UART_L (GPIOC -> BSHR = GPIO_BSHR_BR7)
 
+extern volatile uint8_t DAT_Copia=0, DAT_Pos=0; 
+extern uint32_t Baud_Rate=0;
 
 /*  FUNCIONES PROTOTIPO */
-void PORTC_init(void);
+void UART_SOFT_Init(uint32_t Bauds);
 void SysTick_Handler() __attribute__((interrupt("WCH-Interrupt-fast")));
 void SysTick_Enable(void);
 void SysTick_Disable(void);

@@ -7,6 +7,15 @@
                         despues de ser capturado se envia por UART para visualizar la
 						direccion de o los dispositivos conectados en el bus
  *********************************************************************************/
+ 
+ /*
+    Configuracion en archivo sytem_ch32v00x.c
+ 
+    comentar esta linea -> #define SYSCLK_FREQ_48MHz_HSE   48000000
+    descomentar esta linea -> #define SYSCLK_FREQ_24MHZ_HSI   HSI_VALUE
+
+    El MCU CH32V003 trabajara a 24 MHz y los perifericos a 24 MHz
+ */
 
 #include "debug.h"
 #include "UART_SOFTWARE.h"
@@ -23,18 +32,18 @@ const char hex[]={'A', 'B', 'C', 'D', 'E', 'F'};
 void inttohex(uint8_t dato){
 	/* ENVIA LA PARTE ALTA DEL BYTE */
 	if ((dato >> 4) > 9) {
-		UART_Char(hex[(dato >>4)-10]);
+		UART_SOFT_Char(hex[(dato >>4)-10]);
 	}
 	else {
-		UART_Char((dato >> 4)+'0');
+		UART_SOFT_Char((dato >> 4)+'0');
 	}
 
 	/* ENVIA LA PARTE BAJA DEL BYTE */
 	if ((dato & 0xF) > 9) {
-		UART_Char(hex[(dato & 0xF)-10]);
+		UART_SOFT_Char(hex[(dato & 0xF)-10]);
 	}
 	else {
-		UART_Char((dato & 0xF)+'0');
+		UART_SOFT_Char((dato & 0xF)+'0');
 	}
 }
 
@@ -62,15 +71,15 @@ int main(void){
             I2C_SOFT_Enviar((i<<1));
             Fin_Trama();
             if (RECONOCIMIENTO == 0){
-                UART_Str("******************************************************\r\n\n");
-                UART_Str("La Direccion I2C es: ");
-                UART_Char(num/100 +48);
+                UART_SOFT_Str("******************************************************\r\n\n");
+                UART_SOFT_Str("La Direccion I2C es: ");
+                UART_SOFT_Char(num/100 +48);
                 num%=100;
-                UART_Char(num/10+48);
-                UART_Char(num%10+48);
-                UART_Str(" (0x");
+                UART_SOFT_Char(num/10+48);
+                UART_SOFT_Char(num%10+48);
+                UART_SOFT_Str(" (0x");
                 inttohex(i);
-                UART_Str(")\r\n\n");
+                UART_SOFT_Str(")\r\n\n");
                 Delay_Ms(1000);
             }
             else {

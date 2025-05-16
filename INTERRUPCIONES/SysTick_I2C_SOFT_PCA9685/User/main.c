@@ -1,0 +1,93 @@
+/********************************** (C) COPYRIGHT *******************************
+ * File Name          : main.c
+ * Author             : WCH
+ * Version            : V1.0.0
+ * Date               : 2023/12/25
+ * Description        : PCA9685; Se genera el codigo de acuerdo al datasheet del PCA9685
+                        para generar el PWM que se usara para controlar servo motores SG90
+                        mediante I2C por software.
+ *********************************************************************************/
+
+#include "debug.h"
+#include "I2C_SOFTWARE.h"
+#include "PCA9685.h"
+
+
+/*********************************************************************
+ * @fn      main
+ *
+ * @brief   Main program.
+ *
+ * @return  none
+ */
+int main(void){
+    Delay_Init();
+    I2C_SOFT_Init(100000);
+    PCA9685_SERVO_INIT();
+
+    while(1){
+        for (uint16_t i=0; i<360; i+=4){
+			PCA9685_SERVO_GRADOS(i, _NEG, 0);
+			//PCA9685_SERVO_GRADOS(i, _NEG, 1);
+			Delay_Ms(10);
+		}
+		for (uint16_t i=0; i<360; i+=4){
+			//PCA9685_SERVO_GRADOS(i, _NEG, 0);
+			PCA9685_SERVO_GRADOS(i, _NEG, 1);
+			Delay_Ms(10);
+		}
+
+		for (uint16_t i=0; i<360; i+=4){
+			PCA9685_SERVO_GRADOS(360-i, _NEG, 0);
+			//PCA9685_SERVO_GRADOS(i, _NEG, 1);
+			Delay_Ms(10);
+		}
+
+		for (uint16_t i=0; i<360; i+=4){
+			//PCA9685_SERVO_GRADOS(360-i, _NEG, 0);
+			PCA9685_SERVO_GRADOS(360-i, _NEG, 1);
+			Delay_Ms(10);
+		}
+
+		for (uint16_t i=0; i<360; i+=4){
+			PCA9685_SERVO_GRADOS(i, _POS, 0);
+			//PCA9685_SERVO_GRADOS(i, _NEG, 1);
+			Delay_Ms(10);
+		}
+		for (uint16_t i=0; i<360; i+=4){
+			//PCA9685_SERVO_GRADOS(i, _NEG, 0);
+			PCA9685_SERVO_GRADOS(i, _POS, 1);
+			Delay_Ms(10);
+		}
+
+		for (uint16_t i=0; i<360; i+=4){
+			PCA9685_SERVO_GRADOS(360-i, _POS, 0);
+			//PCA9685_SERVO_GRADOS(i, _NEG, 1);
+			Delay_Ms(10);
+		}
+
+		for (uint16_t i=0; i<360; i+=4){
+			//PCA9685_SERVO_GRADOS(360-i, _NEG, 0);
+			PCA9685_SERVO_GRADOS(360-i, _POS, 1);
+			Delay_Ms(10);
+		}
+
+		
+
+
+		/* PCA9685_SERVO_GRADOS(90, _NEG, 0);
+		PCA9685_SERVO_GRADOS(90, _POS, 1);
+		Delay_Ms(500);
+
+		for (uint16_t i=0; i<360; i+=4){
+			PCA9685_SERVO_GRADOS(i, _POS, 0);
+			PCA9685_SERVO_GRADOS(i, _NEG, 1);
+			Delay_Ms(10);
+		}
+
+		PCA9685_SERVO_GRADOS(90, _POS, 0);
+		PCA9685_SERVO_GRADOS(90, _NEG, 1);
+		Delay_Ms(500); */
+
+    }
+}

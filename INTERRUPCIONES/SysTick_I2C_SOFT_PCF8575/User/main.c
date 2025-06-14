@@ -1,6 +1,6 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
- * Author             : WCH
+ * Author             : Uriel Garnica
  * Version            : V1.0.0
  * Date               : 2023/12/25
  * Description        : PCF8575; Se crea el codigo necesario para expandir 16 pines de

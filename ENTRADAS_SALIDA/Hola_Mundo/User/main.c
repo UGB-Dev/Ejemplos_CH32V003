@@ -1,6 +1,6 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
- * Author             : WCH
+ * Author             : Urie Garnica
  * Version            : V1.0.0
  * Date               : 2023/12/25
  * Description        : Hola Mundo; Parpadeo de un led (PD5).

@@ -1,6 +1,6 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
- * Author             : WCH
+ * Author             : Uriel Garnica
  * Version            : V1.0.0
  * Date               : 2023/12/25
  * Description        : Entradas y Salidas; Activacion de PD2 mediante PC0.

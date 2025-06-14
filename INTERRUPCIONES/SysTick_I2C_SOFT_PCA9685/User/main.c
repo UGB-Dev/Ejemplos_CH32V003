@@ -1,12 +1,20 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
- * Author             : WCH
+ * Author             : Uriel Garnica
  * Version            : V1.0.0
  * Date               : 2023/12/25
  * Description        : PCA9685; Se genera el codigo de acuerdo al datasheet del PCA9685
                         para generar el PWM que se usara para controlar servo motores SG90
                         mediante I2C por software.
  *********************************************************************************/
+  /*
+    Configuracion en archivo sytem_ch32v00x.c
+ 
+    comentar esta linea -> #define SYSCLK_FREQ_48MHz_HSE   48000000
+    descomentar esta linea -> #define SYSCLK_FREQ_24MHZ_HSI   HSI_VALUE
+
+    El MCU CH32V003 trabajara a 24 MHz y los perifericos a 24 MHz
+ */
 
 #include "debug.h"
 #include "I2C_SOFTWARE.h"

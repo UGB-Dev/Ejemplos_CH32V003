@@ -1,6 +1,6 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
- * Author             : WCH
+ * Author             : Uriel Garnica
  * Version            : V1.0.0
  * Date               : 2023/12/25
  * Description        : Tx 433 MHz: Generar la trama de datos usando UART y codificacion
@@ -12,9 +12,7 @@
     comentar esta linea -> #define SYSCLK_FREQ_48MHz_HSE   48000000
     descomentar esta linea -> #define SYSCLK_FREQ_24MHZ_HSI   HSI_VALUE
 
-    El MCU CH32V003 trabajara a 24 MHz y los perifericos a 24 MHz
-
-    NOTA: No usar el pin PC7 ya que se usa para controlar el sensor DHT11  
+    El MCU CH32V003 trabajara a 24 MHz y los perifericos a 24 MHz 
  */
 
 

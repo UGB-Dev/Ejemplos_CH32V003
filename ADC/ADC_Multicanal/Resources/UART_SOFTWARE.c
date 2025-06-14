@@ -25,7 +25,7 @@ void SysTick_Disable(void){
 /*********************************************************************
  * @fn      UART_SOFT_Init
  *
- * @brief   pin PC1 for UART
+ * @brief   pin PC7 for UART
  *          8N1 defaul UART (8 bit, no parity, 1 stop bit)
  *
  * @return  none
@@ -37,8 +37,8 @@ void UART_SOFT_Init(uint32_t Bauds){
     RCC -> APB2PCENR |= RCC_IOPCEN; // se habilita el reloj de puerto C
 
     /*  CONFIGURACION DE LOS PINES DEL PUERTO C  */
-    GPIOC -> CFGLR &= ~(0xF<<4); // reset en pin PC1
-    GPIOC -> CFGLR |= GPIO_CFGLR_MODE1; // pin PC1 como salida push-pull a 30MHz
+    GPIOC -> CFGLR &= ~(0xF<<28); // reset en pin PC1
+    GPIOC -> CFGLR |= GPIO_CFGLR_MODE7; // pin PC1 como salida push-pull a 30MHz
 
     Baud_Rate = 1000000/Bauds;
     UART_H; // se mantiene en 1 logico la salida
@@ -61,25 +61,23 @@ void UART_Str(const char* DAT){
 
 void SysTick_Handler(){ // Rutina de interrupcion SysTick
     switch(DAT_Pos){ // switch UART
-			case 1: 
-            // bit de start
-				DAT_Pos++;
-				UART_H;
-				UART_L;
-				break;
+        case 1: // bit de start
+            DAT_Pos++;
+            UART_H;
+            UART_L;
+            break;
 
-			case 2 ... 9:
-            // se enviar el bit menos significativo primero
-				( DAT_Copia & 0x01 )? UART_H : UART_L;
-				DAT_Copia >>= 1;
-				DAT_Pos++;
-				break;
+        case 2 ... 9: // se enviar el bit menos significativo primero
+            ( DAT_Copia & 0x01 )? UART_H : UART_L;
+            DAT_Copia >>= 1;
+            DAT_Pos++;
+            break;
 			
-			case 10: // bit de stop
-				UART_H;
-				DAT_Pos =0;
-				break;
-		}//fin de switch
+        case 10: // bit de stop
+            UART_H;
+            DAT_Pos =0;
+            break;
+    }//fin de switch
 
     SysTick -> SR = 0; // se borra la bandera para salir de la interrupcion
 }

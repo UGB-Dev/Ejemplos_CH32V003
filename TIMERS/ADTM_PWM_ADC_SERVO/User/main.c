@@ -18,7 +18,7 @@
 
 #include "debug.h"
 #include "ADC.h"
-#include "Timer1_PWM.h"
+#include "TIM1_PWM.h"
 #include "UART_SOFTWARE.h"
 
 #define Fpwm 50  // 50 Hz para la frecuencia del PWM
@@ -34,7 +34,7 @@
 int main(void){
     Delay_Init();
     ADC_Init_Simple();
-    PWM_Init();
+    PWM_Init(PWM2_MODE);
     UART_SOFT_Init(115200); 
 
     uint16_t ADC_Value = 0, aux_adc=0,PWM_Duty = 0;

@@ -3,10 +3,11 @@
  * Author             : Uriel Garnica
  * Version            : V1.0.0
  * Date               : 2023/12/25
- * Description        : ADTM; Usar los registros necesarios para configurar el Timer 1 
- *                      en modo PWM 1 o modo PWM 2 en el pin PA1.                     
+ * Description        : ADTM; Se configuran los registros necesarios para que el Timer 1
+*                       trabaje en modo Output Compare (OC) que servira para trabajar en 
+*                       modo FIP, PWM1 y PWM2.
  *********************************************************************************/
-/*
+  /*
     Configuracion en archivo sytem_ch32v00x.c
  
     comentar esta linea -> #define SYSCLK_FREQ_48MHz_HSE   48000000
@@ -16,7 +17,7 @@
  */
 
 #include "debug.h"
-#include "TIM1_PWM.h"
+#include "TIM1_OUTPUT_COMPARE.h"
 
 
 /*********************************************************************
@@ -27,18 +28,8 @@
  * @return  none
  */
 int main(void){
-    Delay_Init();
-    PWM_Init(PWM1_MODE);
+    Output_Compare_Init(PWM2_MODE); 
 
-    uint8_t i=1;
     while(1){
-        PWM_Set(60, i++, 1000); // F=50Hz; i=Duty_cycle; Base_Time=1KHz=1ms
-        Delay_Ms(10);
-
-        if (i==99) {
-            i=1;
-        }
-
     }
 }
-

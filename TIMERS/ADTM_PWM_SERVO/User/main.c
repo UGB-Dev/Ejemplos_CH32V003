@@ -7,7 +7,7 @@
  *********************************************************************************/
 
 #include "debug.h"
-#include "Timer1_PWM.h"
+#include "TIM1_PWM.h"
 
 #define Derecha 3 // (0.5ms *100) / 20ms
 #define Izquierda 12 // (2.5ms * 100) / 20ms
@@ -22,7 +22,7 @@
  */
 int main(void){
     Delay_Init(); 
-    PWM_Init(); 
+    PWM_Init(PWM2_MODE); 
 
     while(1){
         PWM_Set(50, Derecha, 10000); // Servomotor giro hacia la Derecha

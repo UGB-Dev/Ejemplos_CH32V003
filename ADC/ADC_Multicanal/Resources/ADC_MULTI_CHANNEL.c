@@ -27,7 +27,7 @@ void ADC_Multi_Channel_Init(void){
                  CTLR1         CTLR1            RSQR1          SMPx=b000          RSQ3          CTLR2          RSTCAL=1
                  SCAN=1        CONT=1         L=0 TO 15                          SQx=bxx        ADON=1          CAL=1
 
-    NOTA: El prescalador del registro " RCC -> CFGR0 " debera ser configurado aun valor de 16 o superior,esto es
+    NOTA: El prescalador del registro " RCC -> CFGR0 " debera ser configurado a un valor de 16 o superior,esto es
     necesario para que se pueda capturar los valores de la conversion de cada canal, de lo contrario use el DMA.
 */
 

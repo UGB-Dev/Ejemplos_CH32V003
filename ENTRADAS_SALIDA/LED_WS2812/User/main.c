@@ -7,25 +7,26 @@
                         descritas en su hoja de datos mediante bit-banging para simular
                         el llenado de un recipiente.
  *********************************************************************************/
- /*
+/*
     Configuracion en archivo sytem_ch32v00x.c
  
     comentar esta linea -> #define SYSCLK_FREQ_48MHz_HSE   48000000
     descomentar esta linea -> #define SYSCLK_FREQ_24MHZ_HSI   HSI_VALUE
 
     El MCU CH32V003 trabajara a 24 MHz y los perifericos a 24 MHz
- */
+*/
 
- /* DETERMINAR EL TIEMPO DE INSTRUCCION USANDO EL REGISTRO BSHR Y OUTDR */
- /* PARA BSHR  1 Y 0 LOGICO SON 83.5 ns 
+/* DETERMINAR EL TIEMPO DE INSTRUCCION USANDO EL REGISTRO BSHR Y OUTDR:
+    PARA BSHR  1 Y 0 LOGICO SON 83.5 ns 
     PARA OUTDR 1 Y 0 LOGICO SON 208.5 ns (deb usarse operadores logicos)
-    LA INSTRUCCION asm nop SON 41.5 ns                                               */
+    LA INSTRUCCION asm nop SON 41.5 ns
+*/
 
 #include "debug.h"
 #include "WS2812.h"
 
 uint8_t Secuencia_llenado[] = { 5, 6, 7, 8,
-                               3, 2, 1, 4 };
+                                3, 2, 1, 4 };
 
                             
 /*********************************************************************
@@ -38,14 +39,12 @@ uint8_t Secuencia_llenado[] = { 5, 6, 7, 8,
 int main(void){
     Delay_Init();
 
-    /*ACTIVACION DE PERIFERICOS*/
-    RCC -> APB2PRSTR |= RCC_IOPCRST; // activar reset en puerto C
-    RCC -> APB2PRSTR &= ~RCC_IOPCRST; // desactivar reset en puerto C
-    RCC -> APB2PCENR |= RCC_IOPCEN; // se habilita el reloj del puerto C
+    /* ACTIVACION DE PERIFERICOS */
+    RCC -> APB2PCENR |= RCC_IOPCEN; // Se habilita el reloj del puerto C
 
     /*CONFIGURACION DE LOS PINES DEL PUERTO C */
-    GPIOC -> CFGLR &= ~(0xF<<4); // reset en el pin PC1
-    GPIOC -> CFGLR |= GPIO_CFGLR_MODE1; // Pin PC1 como salida push-pull a 30 MHz
+    GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE1 | GPIO_CFGLR_CNF1); // Borra configuraciones iniciales
+    GPIOC -> CFGLR |= GPIO_CFGLR_MODE1; // PD1 como salida a 30 MHz en modo Push-Pull
 
     /*  COLOR AZUL EN TODA LA MATRIZ 8*8  */
     for (uint8_t i=1; i<9; i++){
@@ -83,6 +82,7 @@ int main(void){
         if (aux_Conteo == 3) {
             aux_Conteo = 0;
             Activar_LED(Secuencia_llenado[x++], y-1);
+            
             /*  AJUSTA LAS VARIABLES "x" Y "y" DESPUES DE LLENAR LA FILA  */
             if (x == 8){ 
                 x=0;    --y;

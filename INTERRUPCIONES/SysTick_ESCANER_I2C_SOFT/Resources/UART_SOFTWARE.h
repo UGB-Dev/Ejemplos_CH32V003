@@ -14,19 +14,19 @@
 #include "ch32v00x.h"
 
 /* 
-                           SysTick -> CMP
-        Tiempo_INT = -----------------------------  
-                       24 MHz / STK_CTLR_STLCK
+                           SysTick -> CMP             Despeje                                 Fclk (SystemCoreClock)
+        Tiempo_INT = -----------------------------     ====>       SysTick -> CMP = ------------------------------------------  
+                       24 MHz / STK_CTLR_STLCK                                          STK_CTLR_STLCK * BAUDS(Freq interrupt)                                                
 
         donde:
                 Tiempo_INT = Tiempo de interrupcion 
-                SysTick -> CMP = registro para el valor de comparacion de interrupcion
-                STK_CTLR_STLCK = divisor de frecuencia un 1 equivale a dividir por 1 y
-                                 un 0 equivale a dividir por 8
+                SysTick -> CMP = Registro para el valor de comparacion de interrupcion
+                STK_CTLR_STLCK = Prescalador, un 1 equivale a dividir por 1 y un 0 equivale a dividir por 8,
+                                 este ultimo es el divisor por defecto
 */
 
-#define VALUE_CMP_ms(x) ((SystemCoreClock/8000 )*x ) 
-#define VALUE_CMP_us(x) ((SystemCoreClock/8000000 )*x ) 
+#define VALUE_CMP(x) (SystemCoreClock/(x*8)) 
+//#define VALUE_CMP(x) (SystemCoreClock/x) 
 #define UART_H (GPIOC -> BSHR = GPIO_BSHR_BS5)
 #define UART_L (GPIOC -> BSHR = GPIO_BSHR_BR5)
 

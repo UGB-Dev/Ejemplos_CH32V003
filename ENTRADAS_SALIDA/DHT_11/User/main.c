@@ -26,7 +26,6 @@ uint8_t TEMP[2], HUME[2] ;
 /*  PROTOTIPO DE FUNCION  */
 void PuertoC_Init(void);
 
-
 /*********************************************************************
  * @fn      main
  *
@@ -53,18 +52,16 @@ int main(void){
             }
         }
         else {
-            GPIOC -> OUTDR ^= GPIO_OUTDR_ODR1; // parpadeo en PC1
+            GPIOC -> OUTDR ^= GPIO_OUTDR_ODR1; // Parpadeo en PC1
         }
     }
 }
 
 void PuertoC_Init(void){
     /*  CONFIGURACION DE PERIFERICOS  */
-    RCC -> APB2PRSTR |= RCC_IOPCRST; // activacion de reset en puerto C
-    RCC -> APB2PRSTR &= ~RCC_IOPCRST; // desactivacion de reset en puerto C
-    RCC -> APB2PCENR |= RCC_IOPCEN; // se habilita el reloj de puerto C
+    RCC -> APB2PCENR |= RCC_IOPCEN; // Se habilita el reloj del puerto C
 
     /*  CONFIGURACION DE LOS PINES DEL PUERTO C  */
-    GPIOC -> CFGLR &= ~(0xF<<4); // reset en el pin PC1
-    GPIOC -> CFGLR |= GPIO_CFGLR_MODE1; // Pin PC1 como salida
+    GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE1 | GPIO_CFGLR_CNF1); // Borra configuraciones iniciales
+    GPIOC -> CFGLR |= GPIO_CFGLR_MODE1; // Pin PC1 como salida a 30 MHz en modo Push-Pull
 }

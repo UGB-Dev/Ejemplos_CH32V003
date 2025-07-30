@@ -1,6 +1,6 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
- * Author             : Urie Garnica
+ * Author             : Uriel Garnica
  * Version            : V1.0.0
  * Date               : 2023/12/25
  * Description        : Hola Mundo; Parpadeo de un led (PD5).
@@ -17,8 +17,8 @@
 
 #include "debug.h"
 
-#define LED_ON (GPIOD -> BSHR = GPIO_BSHR_BS5) // set pin PD5
-#define LED_OFF (GPIOD -> BSHR = GPIO_BSHR_BR5) // reset pin PD5
+#define LED_ON (GPIOD -> BSHR = GPIO_BSHR_BS5) // Set pin PD5
+#define LED_OFF (GPIOD -> BSHR = GPIO_BSHR_BR5) // Reset pin PD5
 
 /*********************************************************************
  * @fn      main
@@ -28,14 +28,14 @@
  * @return  none
  */
 int main(void){
-    Delay_Init(); // inicializa los tiempos us y ms
+    Delay_Init(); // Inicializa los tiempos us y ms
 
-    /* Configuracion del Puerto D*/
-    RCC -> APB2PRSTR |= RCC_IOPDRST; // Reset del puerto D activo
-    RCC -> APB2PRSTR &= ~RCC_IOPDRST; // Reset del puerto D inactivo
-    RCC -> APB2PCENR |= RCC_IOPDEN; // se habilita el reloj del puerto D
-    GPIOD -> CFGLR &= ~(0xF<<20); // reset del pin PD5
-    GPIOD -> CFGLR |= GPIO_CFGLR_MODE5; // salida push-pull a 30 MHz max
+    /* ACTIVACION DE PERIFERICOS */
+    RCC -> APB2PCENR |= RCC_IOPDEN; // Se habilita el reloj del puerto D
+
+    /* CONFIGURACION DE LOS PINES DEL PUERTO D */
+    GPIOD -> CFGLR &= ~(GPIO_CFGLR_MODE5 | GPIO_CFGLR_CNF5); // Borra configuraciones iniciales
+    GPIOD -> CFGLR |= GPIO_CFGLR_MODE5; // PD5 como salida a 30 MHz en modo Push-Pull
     
     while(1){
         LED_ON; // PD5 en 1 logico

@@ -12,30 +12,43 @@
 #endif
 
 #include "ch32v00x.h"
+//#include <stdint.h>
 
 /* 
-                           SysTick -> CMP
-        Tiempo_INT = -----------------------------  
-                       24 MHz / STK_CTLR_STLCK
+                           SysTick -> CMP             Despeje                                 Fclk (SystemCoreClock)
+        Tiempo_INT = -----------------------------     ====>       SysTick -> CMP = ------------------------------------------  
+                       24 MHz / STK_CTLR_STLCK                                          STK_CTLR_STLCK * BAUDS(Freq interrupt)                                                
 
         donde:
                 Tiempo_INT = Tiempo de interrupcion 
                 SysTick -> CMP = registro para el valor de comparacion de interrupcion
-                STK_CTLR_STLCK = divisor de frecuencia un 1 equivale a dividir por 1 y
-                                 un 0 equivale a dividir por 8
+                STK_CTLR_STLCK = Prescalador, un 1 equivale a dividir por 1 y un 0 equivale a dividir por 8,
+                                 este ultimo es el divisor por defecto
 */
 
-#define VALUE_CMP_ms(x) ((SystemCoreClock/8000 )*x ) 
-#define VALUE_CMP_us(x) ((SystemCoreClock/8000000 )*x ) 
+#define VALUE_CMP(x) (SystemCoreClock/(x*8)) 
+//#define VALUE_CMP(x) (SystemCoreClock/x) 
 #define UART_H (GPIOC -> BSHR = GPIO_BSHR_BS7)
 #define UART_L (GPIOC -> BSHR = GPIO_BSHR_BR7)
 
+#define Systick_STRE ((uint32_t)0x00000008) /* Auto-Reload count enable bit */
+#define SysTick_STLK ((uint32_t)0x00000004) /* Counter clock source selection bit */
+#define Systick_STIE ((uint32_t)0x00000002) /* Counter interrupt enable control bit */
+#define SysTick_STE ((uint32_t)0x00000001) /* System counter enable control bit */
+
+
+extern volatile uint8_t DAT_Copia, DAT_Pos; 
+extern uint32_t Baud_Rate;
+extern void (*Trama_Protocolo)(void);
+
+/*  FUNCIONES PROTOTIPO */
 void UART_SOFT_Init(uint32_t Bauds);
-void SysTick_Handler() __attribute__((interrupt("WCH-Interrupt-fast")));
 void SysTick_Enable(void);
 void SysTick_Disable(void);
 void UART_SOFT_Char(uint8_t DAT);
 void UART_SOFT_Str(const char* DAT);
+void Trama_UART(void);
+void SysTick_Handler() __attribute__((interrupt("WCH-Interrupt-fast")));
 
 #ifdef __cplusplus
  }

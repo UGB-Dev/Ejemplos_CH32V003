@@ -8,76 +8,79 @@
 
 volatile uint8_t DAT_Copia=0, DAT_Pos=0; // variables de control para envio de datos
 uint32_t Baud_Rate=0;
-
-void SysTick_Enable(void){
-    SysTick -> SR &= ~(1<<0); // se borra bandera 
-    SysTick -> CMP = VALUE_CMP_us(Baud_Rate);
-    SysTick -> CTLR = 0x0B;
-    SysTick -> CNT = 0;
-    NVIC_EnableIRQ(SysTicK_IRQn); // se habilita la peticion de interrupcion externa para SysTick
-}
-
-void SysTick_Disable(void){
-    SysTick -> CTLR = 0;
-    NVIC_DisableIRQ(SysTicK_IRQn); // se deshabilita la peticion de interrupcion externa para SysTick
-}
+void (*Trama_Protocolo)(void);
 
 /*********************************************************************
  * @fn      UART_SOFT_Init
  *
- * @brief   pin PC7 for UART
- *          8N1 defaul UART (8 bit, no parity, 1 stop bit)
- *
- * @return  none
+ * @brief   Pin PC7 for UART
+ * @brief   8N1 defaul UART (8 bit, no parity, 1 stop bit)
+ * @brief   Max BAUD RATE is 230400
  */
 void UART_SOFT_Init(uint32_t Bauds){
-    /*  CONFIGURACION DEL PERIFERICO  */  
-    RCC -> APB2PRSTR |= RCC_IOPCRST; // activacion de reset en puerto C
-    RCC -> APB2PRSTR &= ~RCC_IOPCRST; // desactivacion de reset en puerto C
-    RCC -> APB2PCENR |= RCC_IOPCEN; // se habilita el reloj de puerto C
+    /*  ACTIVACION DE PERIFERICOS  */ 
+    RCC -> APB2PCENR |= RCC_IOPCEN; // Se habilita el reloj del puerto C
 
     /*  CONFIGURACION DE LOS PINES DEL PUERTO C  */
-    GPIOC -> CFGLR &= ~(0xF<<28); // reset en pin PC1
-    GPIOC -> CFGLR |= GPIO_CFGLR_MODE7; // pin PC1 como salida push-pull a 30MHz
+    GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE7 | GPIO_CFGLR_CNF7); // Borra configuraciones iniciales 
+    GPIOC -> CFGLR |= GPIO_CFGLR_MODE7; // PC7 como salida a 30 MHz en modo Push-Pull
 
-    Baud_Rate = 1000000/Bauds;
-    UART_H; // se mantiene en 1 logico la salida
+    Baud_Rate = Bauds;
+    UART_H; // Se mantiene en 1 logico la salida
 }
 
-void UART_Char(uint8_t DAT){
-    SysTick_Enable(); // se habilita la interrupcion del SysTick 
-    DAT_Copia = DAT; 
+void SysTick_Enable(void){
+    SysTick -> SR &= ~(1<<0); // Borra bandera
+    SysTick -> CMP = VALUE_CMP(Baud_Rate); // Valor de comparacion
+    SysTick -> CTLR |= Systick_STRE | Systick_STIE | SysTick_STE; // Interrupcion y autorecarga del SisTick habilitada
+    SysTick -> CNT = 0; // Contador inicia en cero
+    NVIC_EnableIRQ(SysTicK_IRQn); // Se habilita la peticion de interrupcion externa para SysTick
+}
+
+void SysTick_Disable(void){
+    SysTick -> CTLR = 0;
+    NVIC_DisableIRQ(SysTicK_IRQn);
+}
+
+void UART_SOFT_Char(uint8_t DAT){
+    Trama_Protocolo = Trama_UART;
+    SysTick_Enable();
+    DAT_Copia = DAT;
     DAT_Pos = 1;
-    while (DAT_Pos); // se mantiene hasta enviar el bit de parada
-    SysTick_Disable(); // se deshabilita la interrupcion del SysTick 
+    while (DAT_Pos);
+    SysTick_Disable();
 }
 
-void UART_Str(const char* DAT){
-    /*  ENVIA LOS DATOS DE UN ARRAY*/
+void UART_SOFT_Str(const char* DAT){
     while (*DAT != 0) {
-        UART_Char(*DAT++);
+        UART_SOFT_Char(*DAT++);
     }
 }
 
-void SysTick_Handler(){ // Rutina de interrupcion SysTick
-    switch(DAT_Pos){ // switch UART
-        case 1: // bit de start
+void Trama_UART(void){
+    switch(DAT_Pos){ // Switch UART
+        case 1: 
+        // Bit de start
             DAT_Pos++;
             UART_H;
             UART_L;
             break;
 
-        case 2 ... 9: // se enviar el bit menos significativo primero
+        case 2 ... 9:
+        // Se enviar el bit menos significativo primero
             ( DAT_Copia & 0x01 )? UART_H : UART_L;
             DAT_Copia >>= 1;
             DAT_Pos++;
             break;
 			
-        case 10: // bit de stop
+        case 10: // Bit de stop
             UART_H;
             DAT_Pos =0;
             break;
-    }//fin de switch
+    }//Fin de switch
+}
 
-    SysTick -> SR = 0; // se borra la bandera para salir de la interrupcion
+void SysTick_Handler(){ // Rutina de interrupcion SysTick
+    Trama_Protocolo(); // Ejecuta el Protocolo de comunicacion
+    SysTick -> SR = 0; // Borra la bandera para salir
 }

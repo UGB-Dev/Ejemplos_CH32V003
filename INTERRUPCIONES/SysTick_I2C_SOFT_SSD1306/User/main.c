@@ -13,15 +13,11 @@
     descomentar esta linea -> #define SYSCLK_FREQ_24MHZ_HSI   HSI_VALUE
 
     El MCU CH32V003 trabajara a 24 MHz y los perifericos a 24 MHz
- */
+*/
 
 #include "debug.h"
 #include "I2C_SOFTWARE.h"
 #include "OLED_SSD1306.h"
-
-/*  */
-
- 
 
 /*********************************************************************
  * @fn      main
@@ -32,27 +28,17 @@
  */
 int main(void){
     Delay_Init();
-
-    I2C_SOFT_Init(100000);
-    OLED_init();
+    I2C_SOFT_Init(100000); // Velocidad a 100 Kb/s
+    OLED_Init();
+    
     Delay_Ms(1000);
-
+    OLED_Clear();
     uint8_t cuenta=0;
     
-    OLED_clear();
     while(1){
-        
-       // OLED_cursor(0,0);
-       // Print_OLED("!HOLA MUNDO! :)");
         OLED_Print_Pixel(cuenta, cuenta);
-        //Delay_Ms(100);
-        if (cuenta == 63) {
-            cuenta = 0;
-            OLED_clear();
-        }
-        else {
-            ++cuenta;
-        }
-        
+
+        if (cuenta == 63) { cuenta = 0; OLED_Clear(); }
+        else { ++cuenta; } 
     }
 }

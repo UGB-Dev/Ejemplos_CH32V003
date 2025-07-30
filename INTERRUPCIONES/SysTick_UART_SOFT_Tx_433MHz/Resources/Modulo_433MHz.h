@@ -21,7 +21,6 @@ void Trama_433_MHz(const char* Dato, bool int_str);
 void Cod_Manchester(uint8_t Dato, uint8_t* Save_Dato);
 void Contenido(uint8_t Dato);
 
-
 #ifdef __cplusplus
 }
 #endif

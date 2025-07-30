@@ -55,7 +55,8 @@ extern uint8_t Dato_I2C;
 void Leer_Registro(uint8_t REGISTRO);
 //void Leer_Registros(uint8_t reg_init, uint8_t N_reg, uint8_t *dir_mem);
 void Escribir_Registro(uint8_t REGISTRO, uint8_t DATO);
-
+void Capturar_Eje(uint8_t REG);
+void Imprimir_Eje(void);
 
 #ifdef __cplusplus
  }

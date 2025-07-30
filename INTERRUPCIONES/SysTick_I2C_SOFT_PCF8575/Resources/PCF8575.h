@@ -17,14 +17,13 @@ extern "C" {
 ///////////////////////////////////////////////////////////////////
 //////////////////  REGISTROS DE EEPROM  ////////////////////////
 
-#define ADDR_PCF575_W 0x40  // direccion + escritura
-#define ADDR_PCF575_R 0x41	// direccion + lectura
+#define ADDR_PCF575_W 0x40  // Direccion + Escritura
+#define ADDR_PCF575_R 0x41	// Direccion + Lectura
 
 ///////////////////////////////////////////////////////////////////
 ////////////////////  FUNCIONES PROTOTIPO  ////////////////////////
 
 void PCF8575_OUTPUT(uint8_t Reg_P0, uint8_t Reg_P1);
-
 
 #ifdef __cplusplus
  }

@@ -7,15 +7,14 @@
                         despues de ser capturado se envia por UART para visualizar la
 						direccion de o los dispositivos conectados en el bus
  *********************************************************************************/
- 
- /*
+/*
     Configuracion en archivo sytem_ch32v00x.c
  
     comentar esta linea -> #define SYSCLK_FREQ_48MHz_HSE   48000000
     descomentar esta linea -> #define SYSCLK_FREQ_24MHZ_HSI   HSI_VALUE
 
     El MCU CH32V003 trabajara a 24 MHz y los perifericos a 24 MHz
- */
+*/
 
 #include "debug.h"
 #include "UART_SOFTWARE.h"
@@ -23,29 +22,13 @@
 
 const char hex[]={'A', 'B', 'C', 'D', 'E', 'F'};
 
-#define PC1_ON()  GPIOC -> CFGLR &= ~(0xF<<4); \
+#define PC1_ON()  GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE1 | GPIO_CFGLR_CNF1); \
                   GPIOC -> CFGLR |= GPIO_CFGLR_CNF1_0;
 
-#define PC1_OFF() GPIOC -> CFGLR &= ~(0xF<<4); \
+#define PC1_OFF() GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE1 | GPIO_CFGLR_CNF1); \
                   GPIOC -> CFGLR |= GPIO_CFGLR_MODE1; 
 
-void inttohex(uint8_t dato){
-	/* ENVIA LA PARTE ALTA DEL BYTE */
-	if ((dato >> 4) > 9) {
-		UART_SOFT_Char(hex[(dato >>4)-10]);
-	}
-	else {
-		UART_SOFT_Char((dato >> 4)+'0');
-	}
-
-	/* ENVIA LA PARTE BAJA DEL BYTE */
-	if ((dato & 0xF) > 9) {
-		UART_SOFT_Char(hex[(dato & 0xF)-10]);
-	}
-	else {
-		UART_SOFT_Char((dato & 0xF)+'0');
-	}
-}
+void InttoHex(uint8_t dato);
 
 /*********************************************************************
  * @fn      main
@@ -61,7 +44,7 @@ int main(void){
     
     Delay_Ms(1000);
  
-    GPIOC -> OUTDR &= ~GPIO_OUTDR_ODR1; // pin PC1 a GND
+    GPIOC -> OUTDR &= ~GPIO_OUTDR_ODR1; // Pin PC1 a GND
     uint8_t num;
 
     while(1){
@@ -78,7 +61,7 @@ int main(void){
                 UART_SOFT_Char(num/10+48);
                 UART_SOFT_Char(num%10+48);
                 UART_SOFT_Str(" (0x");
-                inttohex(i);
+                InttoHex(i);
                 UART_SOFT_Str(")\r\n\n");
                 Delay_Ms(1000);
             }
@@ -92,5 +75,23 @@ int main(void){
         Delay_Ms(500);
         PC1_OFF();
         Delay_Ms(500);
+    }
+}
+
+void InttoHex(uint8_t dato){
+    /* ENVIA LA PARTE ALTA DEL BYTE */
+    if ((dato >> 4) > 9) {
+        UART_SOFT_Char(hex[(dato >>4)-10]);
+    }
+    else {
+        UART_SOFT_Char((dato >> 4)+'0');
+    }
+
+    /* ENVIA LA PARTE BAJA DEL BYTE */
+    if ((dato & 0xF) > 9) {
+        UART_SOFT_Char(hex[(dato & 0xF)-10]);
+    }
+    else {
+        UART_SOFT_Char((dato & 0xF)+'0');
     }
 }

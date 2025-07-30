@@ -16,27 +16,27 @@
 #include <stdbool.h>
 
 /* 
-                           SysTick -> CMP
-        Tiempo_INT = -----------------------------  
-                       24 MHz / STK_CTLR_STLCK
+                           SysTick -> CMP             Despeje                                 Fclk (SystemCoreClock)
+        Tiempo_INT = -----------------------------     ====>       SysTick -> CMP = ------------------------------------------  
+                       24 MHz / STK_CTLR_STLCK                                          STK_CTLR_STLCK * BAUDS(Freq interrupt)                                                
 
         donde:
                 Tiempo_INT = Tiempo de interrupcion 
-                SysTick -> CMP = registro para el valor de comparacion de interrupcion
-                STK_CTLR_STLCK = divisor de frecuencia un 1 equivale a dividir por 1 y
-                                 un 0 equivale a dividir por 8
+                SysTick -> CMP = Registro para el valor de comparacion de interrupcion
+                STK_CTLR_STLCK = Prescalador, un 1 equivale a dividir por 1 y un 0 equivale a dividir por 8,
+                                 este ultimo es el divisor por defecto
 */
 
-#define SCL_ON()  GPIOC -> CFGLR &= ~(0xF<<28); \
+#define SCL_ON()  GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE7 | GPIO_CFGLR_CNF7); \
                   GPIOC -> CFGLR |= GPIO_CFGLR_CNF7_0;
 
-#define SCL_OFF() GPIOC -> CFGLR &= ~(0xF<<28); \
+#define SCL_OFF() GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE7 | GPIO_CFGLR_CNF7); \
                   GPIOC -> CFGLR |= GPIO_CFGLR_MODE7; 
 
-#define SDA_ON()  GPIOC -> CFGLR &= ~(0xF<<24); \
+#define SDA_ON()  GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE6 | GPIO_CFGLR_CNF6); \
                   GPIOC -> CFGLR |= GPIO_CFGLR_CNF6_0;
 
-#define SDA_OFF() GPIOC -> CFGLR &= ~(0xF<<24); \
+#define SDA_OFF() GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE6 | GPIO_CFGLR_CNF6); \
                   GPIOC -> CFGLR |= GPIO_CFGLR_MODE6; 
 
 /* PROTOTIPO DE VARIABLES GLOBALES */

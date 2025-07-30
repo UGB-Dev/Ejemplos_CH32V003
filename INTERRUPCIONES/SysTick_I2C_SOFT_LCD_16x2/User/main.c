@@ -14,12 +14,11 @@
     descomentar esta linea -> #define SYSCLK_FREQ_24MHZ_HSI   HSI_VALUE
 
     El MCU CH32V003 trabajara a 24 MHz y los perifericos a 24 MHz
- */
+*/
 
 #include "debug.h"
 #include "I2C_SOFTWARE.h"
 #include "PCF8574T.h"
-
 
 /*********************************************************************
  * @fn      main
@@ -30,7 +29,7 @@
  */
 int main(void){
     Delay_Init();
-    I2C_SOFT_Init(1000000); // I2C a 100 Kb/s
+    I2C_SOFT_Init(1000000); // Velocidad a 100 Kb/s
     
     LCD_Init();
 

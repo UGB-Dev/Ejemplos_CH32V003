@@ -18,7 +18,6 @@
 
 uint8_t DHT_11(uint8_t* Buff, uint8_t medicion);
 
-
 #ifdef __cplusplus
  }
 #endif // __DHT_11_H__

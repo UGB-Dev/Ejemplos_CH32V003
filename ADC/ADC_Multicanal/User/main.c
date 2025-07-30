@@ -9,7 +9,7 @@
  *********************************************************************************/
 
 #include "debug.h"
-#include "ADC.h"
+#include "ADC_MULTI_CHANNEL.h"
 #include "UART_SOFTWARE.h"
 
 /*********************************************************************
@@ -22,13 +22,13 @@
 int main(void){
     Delay_Init();
     UART_SOFT_Init(115200); // UART a 115200 bauds
-    ADC_Init_Multiple();
+    ADC_Multi_Channel_Init();
 
     uint8_t buff_num[5] = {0}; // Buffer para almacenar el valor del ADC
     uint16_t AUX=0; // Variable auxiliar para segmentar el valor ADC
 
     while(1){
-        ADC_Read_Multiple(); 
+        ADC_Multi_Channel_Read(); 
 
         Delay_Ms(150);
         
@@ -38,14 +38,14 @@ int main(void){
             buff_num[i]=AUX%10 + 48;
             AUX/=10;
         }
-        UART_Str("##############################################################\r\n\n");
+        UART_SOFT_Str("##############################################################\r\n\n");
 
         /* ENVIO DEL VALOR ADC DEL CANAL 4 POR UART */
-        UART_Str("Valor ADC CH4: ");
+        UART_SOFT_Str("Valor ADC CH4: ");
         for (uint8_t i=0 ; i<5 ; i++) {
-            UART_Char(buff_num[4-i]);
+            UART_SOFT_Char(buff_num[4-i]);
         }
-        UART_Str("\r\n");
+        UART_SOFT_Str("\r\n");
 
         /* SEGMENTACION DEL VALOR ADC DEL CANAL 6 */
         AUX = ADC_VALUE[1];
@@ -55,16 +55,10 @@ int main(void){
         }
 
         /* ENVIO DEL VALOR ADC DEL CANAL 6 POR UART */
-        UART_Str("Valor ADC CH6: ");
+        UART_SOFT_Str("Valor ADC CH6: ");
         for (uint8_t i=0 ; i<5 ; i++) {
-            UART_Char(buff_num[4-i]);
+            UART_SOFT_Char(buff_num[4-i]);
         }
-        UART_Str("\r\n\n");
+        UART_SOFT_Str("\r\n\n");
     }
 }
-
-
-
- 
-
-

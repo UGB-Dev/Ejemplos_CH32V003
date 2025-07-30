@@ -35,67 +35,41 @@ int main(void){
 
     while(1){
         for (uint16_t i=0; i<360; i+=4){
-			PCA9685_SERVO_GRADOS(i, _NEG, 0);
-			//PCA9685_SERVO_GRADOS(i, _NEG, 1);
-			Delay_Ms(10);
-		}
-		for (uint16_t i=0; i<360; i+=4){
-			//PCA9685_SERVO_GRADOS(i, _NEG, 0);
-			PCA9685_SERVO_GRADOS(i, _NEG, 1);
-			Delay_Ms(10);
-		}
+            PCA9685_SERVO_GRADOS(i, _NEG, 0);
+            Delay_Ms(10);
+        }
+        for (uint16_t i=0; i<360; i+=4){
+            PCA9685_SERVO_GRADOS(i, _NEG, 1);
+            Delay_Ms(10);
+        }
 
-		for (uint16_t i=0; i<360; i+=4){
-			PCA9685_SERVO_GRADOS(360-i, _NEG, 0);
-			//PCA9685_SERVO_GRADOS(i, _NEG, 1);
-			Delay_Ms(10);
-		}
+        for (uint16_t i=0; i<360; i+=4){
+            PCA9685_SERVO_GRADOS(360-i, _NEG, 0);
+            Delay_Ms(10);
+        }
 
-		for (uint16_t i=0; i<360; i+=4){
-			//PCA9685_SERVO_GRADOS(360-i, _NEG, 0);
-			PCA9685_SERVO_GRADOS(360-i, _NEG, 1);
-			Delay_Ms(10);
-		}
+        for (uint16_t i=0; i<360; i+=4){
+            PCA9685_SERVO_GRADOS(360-i, _NEG, 1);
+            Delay_Ms(10);
+        }
 
-		for (uint16_t i=0; i<360; i+=4){
-			PCA9685_SERVO_GRADOS(i, _POS, 0);
-			//PCA9685_SERVO_GRADOS(i, _NEG, 1);
-			Delay_Ms(10);
-		}
-		for (uint16_t i=0; i<360; i+=4){
-			//PCA9685_SERVO_GRADOS(i, _NEG, 0);
-			PCA9685_SERVO_GRADOS(i, _POS, 1);
-			Delay_Ms(10);
-		}
+        for (uint16_t i=0; i<360; i+=4){
+            PCA9685_SERVO_GRADOS(i, _POS, 0);
+            Delay_Ms(10);
+        }
+        for (uint16_t i=0; i<360; i+=4){
+            PCA9685_SERVO_GRADOS(i, _POS, 1);
+            Delay_Ms(10);
+        }
 
-		for (uint16_t i=0; i<360; i+=4){
-			PCA9685_SERVO_GRADOS(360-i, _POS, 0);
-			//PCA9685_SERVO_GRADOS(i, _NEG, 1);
-			Delay_Ms(10);
-		}
+        for (uint16_t i=0; i<360; i+=4){
+            PCA9685_SERVO_GRADOS(360-i, _POS, 0);
+            Delay_Ms(10);
+        }
 
-		for (uint16_t i=0; i<360; i+=4){
-			//PCA9685_SERVO_GRADOS(360-i, _NEG, 0);
-			PCA9685_SERVO_GRADOS(360-i, _POS, 1);
-			Delay_Ms(10);
-		}
-
-		
-
-
-		/* PCA9685_SERVO_GRADOS(90, _NEG, 0);
-		PCA9685_SERVO_GRADOS(90, _POS, 1);
-		Delay_Ms(500);
-
-		for (uint16_t i=0; i<360; i+=4){
-			PCA9685_SERVO_GRADOS(i, _POS, 0);
-			PCA9685_SERVO_GRADOS(i, _NEG, 1);
-			Delay_Ms(10);
-		}
-
-		PCA9685_SERVO_GRADOS(90, _POS, 0);
-		PCA9685_SERVO_GRADOS(90, _NEG, 1);
-		Delay_Ms(500); */
-
+        for (uint16_t i=0; i<360; i+=4){
+            PCA9685_SERVO_GRADOS(360-i, _POS, 1);
+            Delay_Ms(10);
+        }
     }
 }

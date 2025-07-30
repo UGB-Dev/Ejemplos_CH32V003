@@ -16,7 +16,6 @@
 void ADC_Init_Simple(void);
 uint16_t ADC_Read_Simple(void);
 
-
 #ifdef __cplusplus
  }
 #endif //__ADC_H__

@@ -1,6 +1,6 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
- * Author             : Uriel Garnica
+ * Author             : WCH
  * Version            : V1.0.0
  * Date               : 2023/12/25
  * Description        : UART por software y DHT11; configuracion  del pin PC7 (DHT11) y
@@ -32,11 +32,10 @@ uint8_t TEMP[2], HUME[2] ;
  * @return  none
  */
 int main(void){
-
     Delay_Init();
-    UART_SOFT_Init(2400);
+    UART_SOFT_Init(2400); // Velocidad a 2400 bauds
     
-    uint8_t ERROR_T=0, ERROR_H=0;
+    uint8_t ERROR_T=0, ERROR_H=0; // Variables de control
     while(1){
         ERROR_T = DHT_11(TEMP, Temperatura);
         Delay_Ms(500);
@@ -45,20 +44,20 @@ int main(void){
 
         /*  DETERMINA SI LA TRANSMISION DE DATOS FUE EXITOSA */
         if ( (ERROR_H == 1) && (ERROR_T == 1)) {
-            UART_Str("TEMPERATURA: ");
-            UART_Char( (TEMP[0]/10) +'0'); //Se envia la Decena
-            UART_Char( (TEMP[0]%10) + '0'); // Se envia la Unidad
-            UART_Char( 32 ); // Caracter espacio
-            UART_Char(176); // Caracter de бу
-            UART_Str("C\r\n");
+            UART_SOFT_Str("TEMPERATURA: ");
+            UART_SOFT_Char( (TEMP[0]/10) +'0'); // Se envia la Decena
+            UART_SOFT_Char( (TEMP[0]%10) + '0'); // Se envia la Unidad
+            UART_SOFT_Char( 32 ); // Caracter espacio
+            UART_SOFT_Char(176); // Caracter grado
+            UART_SOFT_Str("C\r\n");
 
-            UART_Str("HUMEDAD: ");
-            UART_Char( (HUME[0]/10) +'0'); //Se envia la Decena
-            UART_Char( (HUME[0]%10) + '0'); // Se envia la Unidad
-            UART_Str("\r\n\n");
+            UART_SOFT_Str("HUMEDAD: ");
+            UART_SOFT_Char( (HUME[0]/10) +'0'); // Se envia la Decena
+            UART_SOFT_Char( (HUME[0]%10) + '0'); // Se envia la Unidad
+            UART_SOFT_Str("\r\n\n");
         }
         else {
-            UART_Str(" !ERROR DE COMUNICACION! \r\n\n");
+            UART_SOFT_Str(" !ERROR DE COMUNICACION! \r\n\n");
         } 
     }
 }

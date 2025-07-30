@@ -17,10 +17,8 @@
 
 #include "debug.h"
 
-#define LED_ON (GPIOD -> BSHR = GPIO_BSHR_BS2)
-#define LED_OFF (GPIOD -> BSHR = GPIO_BSHR_BR2)
-
-
+#define LED_ON (GPIOD -> BSHR = GPIO_BSHR_BS2) // Set pin PD2
+#define LED_OFF (GPIOD -> BSHR = GPIO_BSHR_BR2) // Set pin PD2
 
 /*********************************************************************
  * @fn      main
@@ -31,23 +29,21 @@
  */
 int main(void){
 
-    /*ACTIVACION DE PERIFERICOS*/
-    RCC -> APB2PRSTR |= RCC_IOPCRST | RCC_IOPDRST; // activar reset en puerto C y D
-    RCC -> APB2PRSTR &= ~(RCC_IOPCRST | RCC_IOPDRST); // desactivar reset en puerto C y D
-    RCC -> APB2PCENR |= RCC_IOPCEN | RCC_IOPDEN; // Habilitacion del reloj
+    /* ACTIVACION DE PERIFERICOS */
+    RCC -> APB2PCENR |= RCC_IOPCEN | RCC_IOPDEN; // Habilitacion del reloj en puerto C y D
 
-    /*CONFIGURACION DE LOS PINES DEL PUERTO C */
-    GPIOC -> CFGLR &=  ~(0xF<<0); // se desactivan configuraciones random
-    GPIOC -> CFGLR |= GPIO_CFGLR_CNF0_1; // PC0 como entrada en modo pull-up y pull-down
-    GPIOC -> OUTDR |= GPIO_OUTDR_ODR0; // pull-up en PC0
+    /* CONFIGURACION DE LOS PINES DEL PUERTO C */
+    GPIOC -> CFGLR &=  ~(GPIO_CFGLR_MODE0 | GPIO_CFGLR_CNF0); // Borra configuraciones iniciales
+    GPIOC -> CFGLR |= GPIO_CFGLR_CNF0_1; // PC0 como entrada en modo Pull-Up y Pull-Down
+    GPIOC -> OUTDR |= GPIO_OUTDR_ODR0; // Habilita resistencia de Pull-Up en PC0
 
-    /*CONFIGURACION DE LOS PINES DEL PUERTO D*/
-    GPIOD -> CFGLR &= ~(0xF<<8); // se desactivan configuraciones random
-    GPIOD -> CFGLR |= GPIO_CFGLR_MODE2; // PD2 como salida en push-pull a 30 MHz
+    /* CONFIGURACION DE LOS PINES DEL PUERTO D */
+    GPIOD -> CFGLR &= ~(GPIO_CFGLR_MODE2 | GPIO_CFGLR_CNF2); // Borra configuraciones iniciales
+    GPIOD -> CFGLR |= GPIO_CFGLR_MODE2; // PD2 como salida a 30 MHz en modo Push-Pull
    
     while(1){
-        /*ACTIVA EL LED SI HAY UN 0 LOGICO EN PC0*/
-        if ( (GPIOC -> INDR & GPIO_INDR_IDR0) == 0) { 
+        /* ACTIVA EL LED SI HAY UN 0 LOGICO EN PC0 */
+        if ( (GPIOC -> INDR & GPIO_INDR_IDR0) == 0){ 
             LED_ON;
         }
         else {

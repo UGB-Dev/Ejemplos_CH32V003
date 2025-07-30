@@ -34,7 +34,6 @@ void ENVIAR(uint32_t DAT){
             // SE ENVIA EL TIEMPO BAJO DEL BIT PARA UN 1 LOGICO (450 ns)
             GPIOC -> OUTDR &= ~GPIO_OUTDR_ODR1 ; // 208.5 ns
             GPIOC -> OUTDR &= ~GPIO_OUTDR_ODR1 ; // 208.5 ns
-            //__asm__("NOP"); // 41.5 ns
         }
         else {
             // SE ENVIA EL TIEMPO ALTO DEL BIT PARA UN 0 LOGICO (400 ns)
@@ -53,19 +52,19 @@ void ENVIAR(uint32_t DAT){
 
 void Imprimir(uint8_t* DAT, uint16_t TIEMPO, uint32_t Color){
     uint8_t aux;
-	for (uint8_t i=0; i<8; i++){
-		aux = DAT[i]; // almacena el byte presente del buffer
+    for (uint8_t i=0; i<8; i++){
+        aux = DAT[i]; // Almacena el byte presente del buffer
         /*  SE ENVIA UN SOLO COLOR PARA TODA LA MATRIZ 8*8 */
-		for(uint8_t j=0; j<8; j++){
-			(aux & 0x1)? ENVIAR(Color) : ENVIAR(0);
-			aux>>=1;
-		}
-	}
-	Delay_Ms(1+TIEMPO);
+        for(uint8_t j=0; j<8; j++){
+            (aux & 0x1)? ENVIAR(Color) : ENVIAR(0);
+            aux>>=1;
+        }
+    }
+    Delay_Ms(1+TIEMPO);
 }
 
 void Posicion(uint8_t Pos_x, uint8_t Pos_y, uint32_t Color){
-    Buffer[Pos_y-1] |= (1<<(Pos_x-1)); // coloca 1 en la posicion (X,Y) para encender el led 
+    Buffer[Pos_y-1] |= (1<<(Pos_x-1)); // Coloca 1 en la posicion (X,Y) para encender el led 
     Imprimir(Buffer, 250, Color);
     /*                ^     
                  Tiempo en ms       */
@@ -82,7 +81,7 @@ void LineaV(uint8_t Pos_x0, uint8_t Pos_y0, uint8_t Pos_x1, uint32_t Color){
 
     /*  GUARDA E IMPRIME LA LINEA VERTICAL  */
     for (uint8_t x=0; x<(Pos_x1-Pos_x0+1); x++) {
-        Buffer[Pos_y0-1] |= (1<<(Pos_x0+x-1)); // coloca 1 en la posicion (X,Y) para encender el led 
+        Buffer[Pos_y0-1] |= (1<<(Pos_x0+x-1)); // Coloca 1 en la posicion (X,Y) para encender el led 
         Imprimir(Buffer, 1, Color);
     }
 }
@@ -98,7 +97,7 @@ void LineaH(uint8_t Pos_x0, uint8_t Pos_y0, uint8_t Pos_y1, uint32_t Color){
 
     /*  GUARDA E IMPRIME LA LINEA HORIZONTAL  */
     for (uint8_t y=0; y<(Pos_y1-Pos_y0+1); y++) {
-        Buffer[Pos_y0+y-1] |= (1<<(Pos_x0-1)); // coloca 1 en la posicion (X,Y) para encender el led 
+        Buffer[Pos_y0+y-1] |= (1<<(Pos_x0-1)); // Coloca 1 en la posicion (X,Y) para encender el led 
         Imprimir(Buffer, 1, Color);
     }
 }
@@ -114,14 +113,14 @@ void Imprimir_Color(uint8_t* DAT, uint16_t* Color){
     uint8_t aux;
     uint16_t aux_Color;
     
-	for (uint8_t i=0; i<8; i++){
-		aux = DAT[i]; // almacena el byte presente del buffer
-        aux_Color = Color[i]; // almacena el byte presente del buffer_color
+    for (uint8_t i=0; i<8; i++){
+        aux = DAT[i]; // Almacena el byte presente del buffer
+        aux_Color = Color[i]; // Almacena el byte presente del buffer_color
 
         /*  TRANSMISION DEL COLOR DE CADA LED WS2812  */
-		for(uint8_t j=0; j<8; j++){
+        for(uint8_t j=0; j<8; j++){
             /* SE DETERMINA SI EL LED DEBE ESTAR ENCENDIDO  */
-			if(aux & 0x1){ 
+            if(aux & 0x1){ 
                 /*  SE ENVIA EL COLOR DEL LED (X,Y) */
                 switch (aux_Color & 0x3) {
                     case amarillo: // 0b00
@@ -136,34 +135,30 @@ void Imprimir_Color(uint8_t* DAT, uint16_t* Color){
                     case blanco: // 0b11
                         ENVIAR(BLANCO); 
                         break;
-                } // fin del swich
-            }// fin del if(aux & 0x1)
+                } // Fin del swich
+            }// Fin del if(aux & 0x1)
             else{
                 ENVIAR(0);
             }
-			aux >>= 1;
+            aux >>= 1;
             aux_Color >>= 2;
-		} // fin del for
-	}
-	Delay_Ms(1); // retardo para finalizar trama (>50 us)
+        } // Fin del for
+    }
+    Delay_Ms(1); // Retardo para finalizar trama (>50 us)
 }
 
 void Posicion_Color(uint8_t Pos_x, uint8_t Pos_y, uint8_t Color){
-    Buffer[Pos_y-1] |= (1<<(Pos_x-1)); // coloca 1 en la posicion (X,Y) para encender el led 
-    Buffer_Color[Pos_y-1] &= ~(3<<(((Pos_x-1)<<1))); // borra el color anterior 
-    Buffer_Color[Pos_y-1] |= (Color<<(((Pos_x-1)<<1))); // se ajusta el color en la posicion (X,Y) del buffer_color
+    Buffer[Pos_y-1] |= (1<<(Pos_x-1)); // Coloca 1 en la posicion (X,Y) para encender el led 
+    Buffer_Color[Pos_y-1] &= ~(3<<(((Pos_x-1)<<1))); // Borra el color anterior 
+    Buffer_Color[Pos_y-1] |= (Color<<(((Pos_x-1)<<1))); // Se ajusta el color en la posicion (X,Y) del buffer_color
     Imprimir_Color(Buffer, Buffer_Color); 
 }
 
-
-
 void Activar_LED(uint8_t Pos_x, uint8_t Pos_y){
-     Buffer[Pos_y-1] |= (1<<(Pos_x-1)); // coloca 1 en la posicion (X,Y) para encender el led 
-     Imprimir_Color(Buffer, Buffer_Color); 
+    Buffer[Pos_y-1] |= (1<<(Pos_x-1)); // Coloca 1 en la posicion (X,Y) para encender el led 
+    Imprimir_Color(Buffer, Buffer_Color); 
 }
 
-
-
 void Borrar_LED(uint8_t Pos_x, uint8_t Pos_y){
-    Buffer[Pos_y-1] &= ~(1<<(Pos_x-1)); // coloca 0 en la posicion (X,Y) para apagar el led
+    Buffer[Pos_y-1] &= ~(1<<(Pos_x-1)); // Coloca 0 en la posicion (X,Y) para apagar el led
 }

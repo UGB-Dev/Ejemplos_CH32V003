@@ -12,7 +12,7 @@
     descomentar esta linea -> #define SYSCLK_FREQ_24MHZ_HSI   HSI_VALUE
 
     El MCU CH32V003 trabajara a 24 MHz y los perifericos a 24 MHz 
- */
+*/
 
 #include "debug.h"
 #include "UART_SOFTWARE.h"
@@ -27,7 +27,7 @@
  */
 int main(void){ 
     Delay_Init();
-    UART_SOFT_Init(115200); // UART a 115200 bauds
+    UART_SOFT_Init(115200); // Velocidad a 115200 bauds
     ADC_Init_Simple();
 
     uint8_t buff_num[5] = {0}; // Buffer para almacenar el valor del ADC hacia UART
@@ -43,14 +43,14 @@ int main(void){
             AUX/=10;
         }
 
-        UART_Str("##############################################################\r\n\n");
+        UART_SOFT_Str("##############################################################\r\n\n");
 
         /* ENVIO DEL VALOR ADC DEL CANAL 4 POR UART */
-        UART_Str("Valor ADC: ");
+        UART_SOFT_Str("Valor ADC: ");
         for (uint8_t i=0 ; i<5 ; i++) {
-            UART_Char(buff_num[4-i]);
+            UART_SOFT_Char(buff_num[4-i]);
         }
-        UART_Str("    Valor de Voltaje: ");
+        UART_SOFT_Str("    Valor de Voltaje: ");
 
         /* SEGMENTACION DEL VOLTAJE DEL CANAL 4 */
         AUX = (ADC_Value*3.3*1000)/1024;
@@ -66,9 +66,9 @@ int main(void){
 
         /* ENVIO DEL VOLTAJE DEL CANAL 4 POR UART */
         for (uint8_t i=0 ; i<5 ; i++) {
-            UART_Char(buff_num[4-i]);
+            UART_SOFT_Char(buff_num[4-i]);
         }
-        UART_Str(" V\r\n");
+        UART_SOFT_Str(" V\r\n");
     }
 }
 

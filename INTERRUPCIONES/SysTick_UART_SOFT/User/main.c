@@ -28,14 +28,12 @@
 
 int main(void){
     Delay_Init();
-    UART_SOFT_Init(2400);
+    UART_SOFT_Init(115200); // Velocidad a 115200 bauds
 
     while(1){
-        UART_Str("HOLA MUNDO\r\n");
-        //Delay_Ms(500);
-        UART_Str("ESTO ES UN MENSAJE DE UART POR SOFTWARE A 115200 BAUDS\r\n");
-        //Delay_Ms(500);
-        UART_Str("  :)  \r\n\n");
+        UART_SOFT_Str("HOLA MUNDO\r\n");
+        UART_SOFT_Str("ESTO ES UN MENSAJE DE UART POR SOFTWARE A 115200 BAUDS\r\n");
+        UART_SOFT_Str("  :)  \r\n\n");
         Delay_Ms(500);
     }
 }

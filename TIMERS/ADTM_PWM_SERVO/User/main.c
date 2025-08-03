@@ -22,7 +22,7 @@
  */
 int main(void){
     Delay_Init(); 
-    PWM_Init(PWM2_MODE); 
+    PWM_Init(PWM1_MODE); 
 
     while(1){
         PWM_Set(50, Derecha, 10000); // Servomotor giro hacia la Derecha

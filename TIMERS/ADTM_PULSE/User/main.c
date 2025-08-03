@@ -1,9 +1,11 @@
 /********************************** (C) COPYRIGHT *******************************
  * File Name          : main.c
- * Author             : WCH
+ * Author             : Uriel Garnica
  * Version            : V1.0.0
  * Date               : 2023/12/25
- * Description        : Main program body.
+ * Description        : ADTM; Se configuran los registros necesarios para que el timer1
+ *                      funcione en modo pulso, el cual servira para generar un pulso de
+ *                      x duracion despues de un delay previamente configurado.
  *********************************************************************************/
  /*
     Configuracion en archivo sytem_ch32v00x.c

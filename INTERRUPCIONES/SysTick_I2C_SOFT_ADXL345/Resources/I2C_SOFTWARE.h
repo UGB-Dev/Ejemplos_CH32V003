@@ -27,16 +27,16 @@
                                  este ultimo es el divisor por defecto
 */
 
-#define SCL_ON()  GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE7 | GPIO_CFGLR_CNF7); \
+#define SCL_ON()  GPIOC -> CFGLR &= ~GPIO_CFGLR_MODE7; \
                   GPIOC -> CFGLR |= GPIO_CFGLR_CNF7_0;
 
-#define SCL_OFF() GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE7 | GPIO_CFGLR_CNF7); \
+#define SCL_OFF() GPIOC -> CFGLR &= ~GPIO_CFGLR_CNF7; \
                   GPIOC -> CFGLR |= GPIO_CFGLR_MODE7; 
 
-#define SDA_ON()  GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE6 | GPIO_CFGLR_CNF6); \
+#define SDA_ON()  GPIOC -> CFGLR &= ~GPIO_CFGLR_MODE6; \
                   GPIOC -> CFGLR |= GPIO_CFGLR_CNF6_0;
 
-#define SDA_OFF() GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE6 | GPIO_CFGLR_CNF6); \
+#define SDA_OFF() GPIOC -> CFGLR &= ~GPIO_CFGLR_CNF6; \
                   GPIOC -> CFGLR |= GPIO_CFGLR_MODE6; 
 
 /* PROTOTIPO DE VARIABLES GLOBALES */

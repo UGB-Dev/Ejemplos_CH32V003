@@ -29,18 +29,17 @@
 #define VALUE_CMP(x) (SystemCoreClock/(x*8)) 
 //#define VALUE_CMP(x) (SystemCoreClock/x)
 
-#define SCL_ON()  GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE7 | GPIO_CFGLR_CNF7); \
+#define SCL_ON()  GPIOC -> CFGLR &= ~GPIO_CFGLR_MODE7; \
                   GPIOC -> CFGLR |= GPIO_CFGLR_CNF7_0;
 
-#define SCL_OFF() GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE7 | GPIO_CFGLR_CNF7); \
+#define SCL_OFF() GPIOC -> CFGLR &= ~GPIO_CFGLR_CNF7; \
                   GPIOC -> CFGLR |= GPIO_CFGLR_MODE7; 
 
-#define SDA_ON()  GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE6 | GPIO_CFGLR_CNF6); \
+#define SDA_ON()  GPIOC -> CFGLR &= ~GPIO_CFGLR_MODE6; \
                   GPIOC -> CFGLR |= GPIO_CFGLR_CNF6_0;
 
-#define SDA_OFF() GPIOC -> CFGLR &= ~(GPIO_CFGLR_MODE6 | GPIO_CFGLR_CNF6); \
+#define SDA_OFF() GPIOC -> CFGLR &= ~GPIO_CFGLR_CNF6; \
                   GPIOC -> CFGLR |= GPIO_CFGLR_MODE6;  
-
 
 extern volatile uint8_t DAT_Copia, DAT_Pos; // variables de control para envio de datos
 extern volatile bool RECONOCIMIENTO; // ACK(valor en 0) o NACK(valor en 1)
